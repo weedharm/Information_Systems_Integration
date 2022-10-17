@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Giám đốc",
+        "slug": "giam-doc",
+        "description": "Là người có vai trò cấp cao nhất trong hệ thống, có tất cả các quyển.",
+        "created_at": "2021-11-02T14:37:04.211+00:00",
+        "updated_at": "2021-11-02T14:37:04.211+00:00"
+    },
+    {
+        "name": "Quản lý cửa hàng",
+        "slug": "quan-ly-cua-hang",
+        "description": "Là người quản lý một cửa hàng cụ thể, có tất cả các quyển trong phạm vi của cửa hàng đó.",
+        "created_at": "2021-11-02T14:37:04.211+00:00",
+        "updated_at": "2021-11-02T14:37:04.211+00:00"
+    },
+    {
+        "name": "Thu ngân",
+        "slug": "thu-ngan",
+        "description": "Là người có vai trò thực hiện tạo và xuất hóa đơn bán hàng",
+        "created_at": "2021-11-02T14:37:04.211+00:00",
+        "updated_at": "2021-11-02T14:37:04.211+00:00"
+    },
+    {
+        "name": "Nhân viên",
+        "slug": "nhan-vien",
+        "description": "Không tương tác với hệ thống",
+        "created_at": "2021-11-02T14:37:04.211+00:00",
+        "updated_at": "2021-11-02T14:37:04.211+00:00"
+    }
+]

@@ -1,0 +1,38 @@
+### Test
+GET http://localhost:8002/ HTTP/1.1
+
+### Get stores
+GET http://localhost:8002/stores HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MThlMDExNjg3M2M3ZjQzOWExZWE0ZjciLCJ1c2VyUm9sZSI6ImdpYW0tZG9jIiwiaWF0IjoxNjM2NzM1NjQ3LCJleHAiOjE2MzY3MzkyNDd9.iJ_n5JDJLIKGFtRTbXrapGFGZP0XcKgb_uMoGqtN-C0
+
+### Create store
+POST http://localhost:8002/stores HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MThlMDExNjg3M2M3ZjQzOWExZWE0ZjciLCJ1c2VyUm9sZSI6ImdpYW0tZG9jIiwiaWF0IjoxNjM2NzM1NjQ3LCJleHAiOjE2MzY3MzkyNDd9.iJ_n5JDJLIKGFtRTbXrapGFGZP0XcKgb_uMoGqtN-C0
+
+{
+    "name": "Phúc Anh Trần Duy Hưng",
+    "number_employee": 0,
+    "address": "152-154 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+    "manager_id": "618e0116873c7f439a1ea4f7"
+}
+
+### Get store
+GET http://localhost:8002/stores/618e9d70d5f4a6fee30ea4e4 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MThlMDExNjg3M2M3ZjQzOWExZWE0ZjciLCJ1c2VyUm9sZSI6ImdpYW0tZG9jIiwiaWF0IjoxNjM2NzM1NjQ3LCJleHAiOjE2MzY3MzkyNDd9.iJ_n5JDJLIKGFtRTbXrapGFGZP0XcKgb_uMoGqtN-C0
+
+### Update store
+PUT http://localhost:8002/stores/618e9d70d5f4a6fee30ea4e4 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MThlMDExNjg3M2M3ZjQzOWExZWE0ZjciLCJ1c2VyUm9sZSI6ImdpYW0tZG9jIiwiaWF0IjoxNjM2NzM1NjQ3LCJleHAiOjE2MzY3MzkyNDd9.iJ_n5JDJLIKGFtRTbXrapGFGZP0XcKgb_uMoGqtN-C0
+
+{
+    "name": "Phúc Anh Trần Duy Hưng",
+    "number_employee": 0,
+    "address": "152-154 Trần Duy Hưng, Trung Hòa, Cầu Giấy, Hà Nội",
+    "manager_id": "618e0116873c7f439a1ea4f7"
+}
+
+### Delete store
+DELETE http://localhost:8002/stores/618e9d70d5f4a6fee30ea4e4 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MThlMDExNjg3M2M3ZjQzOWExZWE0ZjciLCJ1c2VyUm9sZSI6ImdpYW0tZG9jIiwiaWF0IjoxNjM2NzM1NjQ3LCJleHAiOjE2MzY3MzkyNDd9.iJ_n5JDJLIKGFtRTbXrapGFGZP0XcKgb_uMoGqtN-C0

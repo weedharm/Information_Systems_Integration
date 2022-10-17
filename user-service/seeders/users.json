@@ -1,0 +1,17 @@
+[
+    {
+        "store_id": "6187503907b253a9140d935d",
+        "name": "Mạc Văn Thiêm",
+        "phone": "0981457691",
+        "email": "macthiem@gmail.com",
+        "date_of_birth": "03.01.1999",
+        "role": {
+            "$oid": "6187683e07b253a9140d9369"
+        },
+        "password": "$2b$10$xv0wo5L13NXgvsU/uVzqY.pk4xXELVyKy7y08/eBQF2t1p4ow764y",
+        "created_at": "2021-11-02T14:37:04.211+00:00",
+        "updated_at": "2021-11-02T14:37:04.211+00:00",
+        "avatar": "https://res.cloudinary.com/thiemmv-hust-1999/image/upload/v1636688309/sample.jpg",
+        "cloudinary_id": "sample"
+    }
+]

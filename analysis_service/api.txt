@@ -1,0 +1,28 @@
+http://127.0.0.1:8005/analysis/truth/department : số lượng mặt hàng trong mỗi cửa hàng
+http://127.0.0.1:8005/analysis/truth/size : kích thước của mỗi cửa hàng
+http://127.0.0.1:8005/analysis/truth/type : số lượng các kiểu cửa hàng
+http://127.0.0.1:8005//analysis/truth/weeklySaleInStore?year=...  : doanh số bán của các cửa hàng trong năm nào đó
+http://127.0.0.1:8005/analysis/truth/weeklySaleInDept?year=...&store=... : doanh số bán của các loại mặt hàng của một cửa hàng trong năm nào đó
+
+http://127.0.0.1:8005/run/predict  : chạy dự đoán doanh số (API này phải được gọi ngay khi vào analysis, để có thể gọi được các API bên dưới)
+http://127.0.0.1:8005/analysis/predict/weeklySaleInStore?week=...  : doanh số bán dự đoán của các cửa hàng trong tuần truyên vào
+http://127.0.0.1:8005/analysis/predict/weeklySaleInDept?week=...&store=...  : doanh số bán dự đoán của các loại mặt hàng trong cửa hàng nào đó 
+http://127.0.0.1:8005/analysis/predict/weeklySaleInYear  : so sánh doanh số bán theo năm: trả về doanh số bán của năm trước đó, năm hiện tại (đến tuần hiện tại) và doanh số dự đoán của các tuần tiếp theo (nên vẽ biểu đồ đường với 3 màu khác nhau)
+
+Tất cả là biểu đồ cột, trừ API cuối là biểu đồ đường
+=================================================================================================================================
+
+run/predict: ô cứ chém là sẽ lập lịch để tự động chạy vào thứ 6 hàng tuần, dự đoán doanh số của 4 tuần tiếp theo,
+	     do trong dữ liệu chỉ có đến tuần 43 của năm 2012, do đó chương trình đang giả định dự đoán tuần 44, 45, 46, 47
+
+predict/weelySaleInYear: hiển thị doanh số bán của năm trước, năm hiện tại đến tuần hiện tại, và 4 tuần tiếp theo được dự đoán
+			 của năm hiện tại, nhằm dễ dàng so sánh, đưa ra chính sách phù hợp cho chuỗi cửa hàng
+
+Trong API run/predict, tôi có trả về một trường current_week - tuần hiện tại, các API khác trong phần dự đoán như:
+	+ /predict/weeklySaleInStore?week=...
+	+ /predict/weeklySaleInDept?week=...&store=...
+
+	sẽ chỉ được lựa chọn các week trong phạm vi: current_week + 1, current_week + 2, current_week + 3, current_week + 4
+	mặc định sau khi dự đoán sẽ hiển thị dữ liệu của tuần current_week + 1 và của cửa hàng 1
+	nếu ô không truyền tham số week và store, API cũng đã tự động trả về dữ liệu của current_week + 1 và của store 1
+	
