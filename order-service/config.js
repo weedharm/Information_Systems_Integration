@@ -1,6 +1,6 @@
 module.exports = {
     PORT: 8004,
-    MONGO_URI: "mongodb://localhost:27017/order-service?retryWrites=true&w=majority",
+    MONGO_URI: "mongodb://localhost:27017/orders-service?retryWrites=true&w=majority",
     ACCESS_TOKEN_SECRET: "***REMOVED***",
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
