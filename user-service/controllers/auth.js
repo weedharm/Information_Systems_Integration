@@ -8,17 +8,17 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email: email }).populate("role").lean();
-
+        console.log("req.body", req.body);
         if (!user) {
             return res.status(BAD_REQUEST).json({
                 messsge: "User not found with this email.",
             });
         }
-
-        if (bcrypt.compareSync(password, user.password)) {
+        // bcrypt.compareSync(
+        if (password == user.password) {
             const userRole = user.role.slug ? user.role.slug : "nhan-vien";
             const accessToken = jwt.sign({ userId: user._id, userRole: userRole }, ACCESS_TOKEN_SECRET, {
-                expiresIn: "24h",
+                expiresIn: "104h",
             });
 
             res.send({ user: user, token: accessToken });
