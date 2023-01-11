@@ -15,7 +15,7 @@ const login = async (req, res, next) => {
             });
         }
         // bcrypt.compareSync(
-        if (password == user.password) {
+        if (bcrypt.compareSync(password, user.password)) {
             const userRole = user.role.slug ? user.role.slug : "nhan-vien";
             const accessToken = jwt.sign({ userId: user._id, userRole: userRole }, ACCESS_TOKEN_SECRET, {
                 expiresIn: "104h",
