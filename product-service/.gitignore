@@ -1,1 +1,5 @@
-node_modules
+node_modules/
+npm-debug.log*
+.env
+# runtime uploads (seed images are committed)
+public/uploads/[0-9]*_*

@@ -1,22 +1,24 @@
 {
   "name": "api-gateway",
   "version": "1.0.0",
-  "description": "",
+  "description": "API gateway that proxies the ERP client to the backend microservices",
+  "private": true,
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
-    "body-parser": "^1.19.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "express-fileupload": "^1.2.1",
     "express-http-proxy": "^1.6.3",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.14"
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

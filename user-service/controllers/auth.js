@@ -8,14 +8,13 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email: email }).populate("role").lean();
-        console.log("req.body", req.body);
         if (!user) {
             return res.status(BAD_REQUEST).json({
-                messsge: "User not found with this email.",
+                message: "User not found with this email.",
             });
         }
         // bcrypt.compareSync(
-        if (bcrypt.compareSync(password, user.password)) {
+        if (password && bcrypt.compareSync(password, user.password)) {
             const userRole = user.role.slug ? user.role.slug : "nhan-vien";
             const accessToken = jwt.sign({ userId: user._id, userRole: userRole }, ACCESS_TOKEN_SECRET, {
                 expiresIn: "104h",
@@ -24,7 +23,7 @@ const login = async (req, res, next) => {
             res.send({ user: user, token: accessToken });
         } else {
             return res.status(BAD_REQUEST).json({
-                messsge: "Invalid email or password.",
+                message: "Invalid email or password.",
             });
         }
     } catch (e) {
@@ -34,7 +33,6 @@ const login = async (req, res, next) => {
 };
 
 const currentUser = async (req, res, next) => {
-    console.log(req.userId);
     const currentUser = await User.findById(req.userId);
     return res.send({
         status: 1,

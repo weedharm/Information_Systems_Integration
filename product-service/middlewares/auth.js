@@ -1,21 +1,18 @@
-const asyncMiddleware = require("./async");
 const jwt = require("jsonwebtoken");
 const { UNAUTHORIZED, ACCESS_TOKEN_SECRET } = require("../config");
 
-const auth = async (req, res, next) => {
-    const { authorization } = req.headers;
-    if (!authorization) return res.sendStatus(UNAUTHORIZED);
+const auth = (req, res, next) => {
+    const [tokenType, accessToken] = (req.headers.authorization || "").split(" ");
+    if (tokenType !== "Bearer" || !accessToken) return res.sendStatus(UNAUTHORIZED);
 
-    const [tokenType, accessToken] = authorization.split(" ");
-
-    if (tokenType !== "Bearer") return res.sendStatus(UNAUTHORIZED);
-
-    const { userId, userRole } = await jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
-    req.userId = userId;
-    req.userRole = userRole;
-    return next();
+    try {
+        const { userId, userRole } = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
+        req.userId = userId;
+        req.userRole = userRole;
+        return next();
+    } catch (err) {
+        return res.sendStatus(UNAUTHORIZED);
+    }
 };
 
-module.exports = {
-    auth: asyncMiddleware(auth),
-};
+module.exports = { auth };

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const { PORT, BASE_URL } = require("../config");
+const { BASE_URL } = require("../config");
 
 const UserSchema = new Schema({
     email: {
@@ -30,7 +30,7 @@ const UserSchema = new Schema({
 
     avatar_url: {
         type: String,
-        default: BASE_URL + PORT + "/uploads/default.jpg",
+        default: BASE_URL + "/uploads/default.jpg",
     },
 
     password: {
@@ -40,12 +40,12 @@ const UserSchema = new Schema({
 
     created_at: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
 
     updated_at: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
 
     avatar_name: {

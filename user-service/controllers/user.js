@@ -1,17 +1,8 @@
 const User = require("../models/User");
-const { NOT_FOUND, SALT_ROUNDS } = require("../config");
+const { NOT_FOUND, SALT_ROUNDS, BASE_URL } = require("../config");
 const bcrypt = require("bcrypt");
-const { PORT, BASE_URL } = require("../config");
-const fs = require("fs");
-const amqp = require("amqplib");
-
-async function connect() {
-    const amqpServer = "amqp://localhost:5672";
-    connection = await amqp.connect(amqpServer);
-    channel = await connection.createChannel();
-    await channel.assertQueue("USER");
-}
-connect();
+const { saveUpload, removeUpload } = require("../uploads");
+const { publish } = require("../broker");
 
 const index = async (req, res) => {
     const users = await User.find().populate("role").lean();
@@ -21,16 +12,8 @@ const index = async (req, res) => {
 const store = async (req, res) => {
     // Upload image
     let fileName = "";
-    if (req.files != null) {
-        let prev = Date.now();
-        let file = req.files.avatar;
-        fileName = prev + "_" + file.name;
-        let uploadDir = "./public/uploads/";
-        file.mv(uploadDir + fileName, (error) => {
-            if (error) {
-                throw error;
-            }
-        });
+    if (req.files && req.files.avatar) {
+        fileName = await saveUpload(req.files.avatar);
     }
     // Create new user
     let user = new User();
@@ -42,21 +25,13 @@ const store = async (req, res) => {
     user.password = bcrypt.hashSync(req.body.password, SALT_ROUNDS);
     user.role = req.body.role;
     if (fileName !== "") {
-        user.avatar_url = BASE_URL + PORT + "/uploads/" + fileName;
+        user.avatar_url = BASE_URL + "/uploads/" + fileName;
         user.avatar_name = fileName;
     }
     // Save user
     user = await user.save();
 
-    channel.sendToQueue(
-        "STORE",
-        Buffer.from(
-            JSON.stringify({
-                type: "ADD_USER",
-                payload: req.body.store_id,
-            })
-        )
-    );
+    await publish("STORE", "ADD_USER", req.body.store_id);
 
     user = await User.findById(user._id).populate("role").lean();
 
@@ -76,34 +51,14 @@ const update = async (req, res) => {
     if (!user) return res.sendStatus(NOT_FOUND);
     // Upload image
     let fileName = "";
-    if (req.files != null) {
-        if (user.avatar_name !== "default.jpg") {
-            fs.unlinkSync("./public/uploads/" + user.avatar_name);
-        }
-        let prev = Date.now();
-        let file = req.files.avatar;
-        fileName = prev + "_" + file.name;
-        let uploadDir = "./public/uploads/";
-        file.mv(uploadDir + fileName, (error) => {
-            if (error) {
-                throw error;
-            }
-        });
+    if (req.files && req.files.avatar) {
+        await removeUpload(user.avatar_name);
+        fileName = await saveUpload(req.files.avatar);
     }
 
-    if (req.body.store_id !== user.store_id) {
-        channel.sendToQueue(
-            "STORE",
-            Buffer.from(
-                JSON.stringify({
-                    type: "UPDATE_USER",
-                    payload: {
-                        oldId: user.store_id,
-                        newId: req.body.store_id,
-                    },
-                })
-            )
-        );
+    // Only move the employee counter when the user really changes store.
+    if (req.body.store_id && String(req.body.store_id) !== String(user.store_id)) {
+        await publish("STORE", "UPDATE_USER", { oldId: user.store_id, newId: req.body.store_id });
     }
 
     const data = {};
@@ -115,7 +70,7 @@ const update = async (req, res) => {
     data.role = req.body.role || user.role;
 
     if (fileName !== "") {
-        data.avatar_url = BASE_URL + PORT + "/uploads/" + fileName;
+        data.avatar_url = BASE_URL + "/uploads/" + fileName;
         data.avatar_name = fileName;
     }
 
@@ -129,12 +84,10 @@ const destroy = async (req, res) => {
     let user = await User.findById(id);
     if (!user) return res.sendStatus(NOT_FOUND);
 
-    if (user.avatar_name !== "default.jpg") {
-        fs.unlinkSync("./public/uploads/" + user.avatar_name);
-    }
+    await removeUpload(user.avatar_name);
 
     // Delete user from db
-    user = await user.remove();
+    user = await user.deleteOne();
     return res.send({ status: 1, result: user });
 };
 

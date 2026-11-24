@@ -1,13 +1,6 @@
 const Order = require("../models/Order");
-const amqp = require("amqplib");
-var connection, channel;
-async function connect() {
-    const amqpServer = "amqp://localhost:5672";
-    connection = await amqp.connect(amqpServer);
-    channel = await connection.createChannel();
-    await channel.assertQueue("ORDER");
-}
-connect();
+const { NOT_FOUND } = require("../config");
+const { publish } = require("../broker");
 
 const index = async (req, res) => {
     const orders = await Order.find();
@@ -27,15 +20,8 @@ const store = async (req, res) => {
     // // // Save
     order = await order.save();
 
-    channel.sendToQueue(
-        "PRODUCT",
-        Buffer.from(
-            JSON.stringify({
-                type: "ADD_ORDER",
-                payload: order.list_product,
-            })
-        )
-    );
+    // Let product-service decrease the stock of the sold items.
+    await publish("PRODUCT", "ADD_ORDER", order.list_product);
 
     return res.send({ status: 1, result: order });
 };
@@ -43,14 +29,14 @@ const store = async (req, res) => {
 const show = async (req, res) => {
     const id = req.params.id;
     const order = await Order.findById(id);
-    if (!order) return res.sendStatus(NOTFOUND);
+    if (!order) return res.sendStatus(NOT_FOUND);
     return res.send({ status: 1, result: order });
 };
 
 const update = async (req, res) => {
     const id = req.params.id;
     let order = await Order.findById(id);
-    if (!order) return res.sendStatus(NOTFOUND);
+    if (!order) return res.sendStatus(NOT_FOUND);
 
     const data = {
         customer_name: req.body.customer_name || order.customer_name,
@@ -69,15 +55,8 @@ const destroy = async (req, res) => {
     const order = await Order.findByIdAndDelete(id).lean();
     if (!order) return res.sendStatus(NOT_FOUND);
 
-    channel.sendToQueue(
-        "PRODUCT",
-        Buffer.from(
-            JSON.stringify({
-                type: "DEL_ORDER",
-                payload: order.list_product,
-            })
-        )
-    );
+    // Give the items back to the stock.
+    await publish("PRODUCT", "DEL_ORDER", order.list_product);
 
     return res.send({ status: 1, result: order });
 };

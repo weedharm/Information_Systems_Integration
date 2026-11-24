@@ -1,4 +1,5 @@
 const Store = require("../models/Store");
+const { NOT_FOUND } = require("../config");
 
 const index = async (req, res) => {
     const stores = await Store.find();
@@ -14,7 +15,7 @@ const store = async (req, res) => {
 const show = async (req, res) => {
     const id = req.params.id;
     const store = await Store.findById(id);
-    if (!store) return res.sendStatus(NOTFOUND);
+    if (!store) return res.sendStatus(NOT_FOUND);
     return res.send({ status: 1, result: store });
 };
 
@@ -22,11 +23,11 @@ const update = async (req, res) => {
     const id = req.params.id;
 
     let store = await Store.findById(id);
-    if (!store) return res.sendStatus(NOTFOUND);
+    if (!store) return res.sendStatus(NOT_FOUND);
 
     const data = {
         name: req.body.name || store.name,
-        number_employee: req.body.number_employee || store.number_employee,
+        number_employee: req.body.number_employee ?? store.number_employee,
         address: req.body.address || store.address,
         manager_id: req.body.manager_id || store.manager_id,
     };

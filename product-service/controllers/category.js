@@ -31,10 +31,11 @@ const update = async (req, res) => {
     return res.send({ status: 1, result: category });
 };
 
-const destroy = async () => {
+const destroy = async (req, res) => {
     const id = req.params.id;
-    const product = await Store.findByIdAndDelete(id).lean();
-    return res.send({ status: 1, result: product });
+    const category = await Category.findByIdAndDelete(id).lean();
+    if (!category) return res.sendStatus(NOT_FOUND);
+    return res.send({ status: 1, result: category });
 };
 
 module.exports = {

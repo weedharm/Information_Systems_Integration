@@ -1,18 +1,15 @@
 const mongoose = require("mongoose");
 const { MONGO_URI } = require("../config");
 
-mongoose.connect(MONGO_URI, {
-    autoIndex: false,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+mongoose.set("strictQuery", true);
+
+mongoose.connect(MONGO_URI);
 
 mongoose.connection.on("error", (err) => {
-    console.error("MongoDB connection error.");
-    console.error(err);
-    process.exit();
+    console.error("MongoDB connection error:", err.message);
+    process.exit(1);
 });
 
 mongoose.connection.once("open", () => {
-    console.log(`Connected to MongoDB: ${MONGO_URI}`);
+    console.log(`Connected to MongoDB database "${mongoose.connection.name}"`);
 });

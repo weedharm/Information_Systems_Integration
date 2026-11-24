@@ -8,7 +8,6 @@ const app = express();
 
 app.use(logger("dev"));
 app.use(cors());
-app.use(express.json());
 
 // Routes
 app.get("/api", (req, res, next) => {
@@ -17,11 +16,14 @@ app.get("/api", (req, res, next) => {
     });
 });
 
-app.use("/api/sv_1", proxy(userServiceUrl));
-app.use("/api/sv_2", proxy(storeServiceUrl));
-app.use("/api/sv_3", proxy(productServiceUrl));
-app.use("/api/sv_4", proxy(orderServiceUrl));
-app.use("/api/sv_5", proxy(analysisServiceUrl));
+// Stream request bodies untouched so JSON and multipart uploads both reach the services.
+const forward = (url) => proxy(url, { parseReqBody: false });
+
+app.use("/api/sv_1", forward(userServiceUrl)); // users, roles, auth
+app.use("/api/sv_2", forward(storeServiceUrl)); // stores
+app.use("/api/sv_3", forward(productServiceUrl)); // products, categories, stock items
+app.use("/api/sv_4", forward(orderServiceUrl)); // orders
+app.use("/api/sv_5", forward(analysisServiceUrl)); // sales analysis & forecast
 
 // 404
 app.use((req, res, next) => {

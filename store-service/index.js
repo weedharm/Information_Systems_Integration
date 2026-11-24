@@ -4,7 +4,7 @@ const app = express();
 const logger = require("morgan");
 const { PORT } = require("./config");
 const storeRoute = require("./routes/store");
-const amqp = require("amqplib");
+const { consume } = require("./broker");
 require("./models");
 const { addUser, updateUser } = require("./controllers/handleEvent");
 
@@ -13,27 +13,10 @@ app.use(logger("dev"));
 app.use(cors());
 app.use(express.json());
 
-async function connect() {
-    const amqpServer = "amqp://localhost:5672";
-    connection = await amqp.connect(amqpServer);
-    channel = await connection.createChannel();
-    await channel.assertQueue("STORE");
-}
-connect().then(() => {
-    channel.consume("STORE", (data) => {
-        const { type, payload } = JSON.parse(data.content);
-        switch (type) {
-            case "ADD_USER":
-                addUser(payload);
-                break;
-            case "UPDATE_USER":
-                updateUser(payload);
-                break;
-            default:
-                break;
-        }
-        channel.ack(data);
-    });
+// Keep each store's employee counter in sync with user-service events.
+consume("STORE", async (type, payload) => {
+    if (type === "ADD_USER") await addUser(payload);
+    else if (type === "UPDATE_USER") await updateUser(payload);
 });
 
 // Routes

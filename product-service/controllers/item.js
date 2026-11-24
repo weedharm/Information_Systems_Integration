@@ -1,4 +1,5 @@
 const Item = require("../models/Item");
+const { NOT_FOUND } = require("../config");
 
 const index = async (req, res) => {
     const items = await Item.find().populate("product_id").lean();

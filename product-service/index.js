@@ -8,7 +8,7 @@ const { PORT } = require("./config");
 const productRoute = require("./routes/product");
 const categoryRoute = require("./routes/category");
 const itemRoute = require("./routes/item");
-const amqp = require("amqplib");
+const { consume } = require("./broker");
 const { addOrder, deleteOrder } = require("./controllers/handleEvent");
 require("./models");
 
@@ -20,27 +20,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-async function connect() {
-    const amqpServer = "amqp://localhost:5672";
-    connection = await amqp.connect(amqpServer);
-    channel = await connection.createChannel();
-    await channel.assertQueue("PRODUCT");
-}
-connect().then(() => {
-    channel.consume("PRODUCT", (data) => {
-        const { type, payload } = JSON.parse(data.content);
-        switch (type) {
-            case "ADD_ORDER":
-                addOrder(payload);
-                break;
-            case "DEL_ORDER":
-                deleteOrder(payload);
-                break;
-            default:
-                break;
-        }
-        channel.ack(data);
-    });
+// Keep item stock in sync with order-service events.
+consume("PRODUCT", async (type, payload) => {
+    if (type === "ADD_ORDER") await addOrder(payload);
+    else if (type === "DEL_ORDER") await deleteOrder(payload);
 });
 
 // Routes
