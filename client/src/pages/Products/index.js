@@ -7,6 +7,7 @@ import Spinner from "../../components/Spinner";
 import DetailProduct from "../Modal/DetailProduct";
 import CreateProduct from "../Modal/CreateProduct";
 import UpdateProduct from "../Modal/UpdateProduct";
+import formatDate from "../../utils/formatDate";
 
 const Product = () => {
     const [products, setProducts] = useState([]);
@@ -44,8 +45,7 @@ const Product = () => {
     }, [reload]);
 
     products.forEach((product) => {
-        let d = new Date(product.createdAt);
-        let date = `${d.getDay()}.${d.getMonth()}.${d.getFullYear()}`;
+        let date = formatDate(product.createdAt);
         datas.push({ ...product, createdAt: date, categoryName: product.category.name });
     });
 

@@ -7,6 +7,7 @@ import Button from "../../components/Button";
 import Table from "../../components/Table";
 import CreateNewItem from "../Modal/CreateNewItem";
 import UpdateItem from "../Modal/UpdateItem";
+import formatDate from "../../utils/formatDate";
 
 const Warehouse = () => {
     const [items, setItems] = useState([]);
@@ -43,8 +44,7 @@ const Warehouse = () => {
     }, [storeId, reload]);
 
     items.forEach((item) => {
-        let d = new Date(item.createdAt);
-        let date = `${d.getDay()}.${d.getMonth()}.${d.getFullYear()}`;
+        let date = formatDate(item.createdAt);
         datas.push({ ...item, createdAt: date, productName: item.productId.name, productUnit: item.productId.unit, productSku: item.productId.sku });
     });
 

@@ -8,6 +8,7 @@ import CreateStore from "../Modal/CreateStore";
 import UpdateStore from "../Modal/UpdateStore";
 import { useDispatch } from "react-redux";
 import { deleteStoreAsync } from "../../redux/storeSlice";
+import formatDate from "../../utils/formatDate";
 
 const Store = () => {
     const [users, setUsers] = useState([]);
@@ -29,8 +30,7 @@ const Store = () => {
     let datas = [];
 
     stores.forEach((store) => {
-        let d = new Date(store.createdAt);
-        let date = `${d.getDay()}.${d.getMonth()}.${d.getFullYear()}`;
+        let date = formatDate(store.createdAt);
         users.forEach((user) => {
             if (store.managerId === user.id) {
                 datas.push({ ...store, manager: user.name, createdAt: date });

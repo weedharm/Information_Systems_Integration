@@ -1,5 +1,14 @@
 import api from "./api";
 
+const runPredict = async () => {
+    const datas = await api({
+        method: "GET",
+        url: "/sv_5/run/predict",
+    });
+
+    return datas;
+};
+
 const truthDepartment = async () => {
     const datas = await api({
         method: "GET",
@@ -76,4 +85,4 @@ const weeklySaleInYear = async () => {
     return datas;
 };
 
-export { truthDepartment, truthSize, truthType, weeklySaleInStore, weeklySaleInDept, predictWeeklySaleInStore, predictWeeklySaleInDept, weeklySaleInYear };
+export { runPredict, truthDepartment, truthSize, truthType, weeklySaleInStore, weeklySaleInDept, predictWeeklySaleInStore, predictWeeklySaleInDept, weeklySaleInYear };

@@ -3,6 +3,7 @@ import { Wrapper } from "./styles";
 import { ReactTable, TableBody, TableRow, TableData } from "../../components/Table/styles";
 import { useSelector } from "react-redux";
 import { Avatar, Image } from "../Modal/styles";
+import formatDate from "../../utils/formatDate";
 
 const Profile = () => {
     let user = useSelector((state) => state.auth.user);
@@ -12,8 +13,7 @@ const Profile = () => {
             user = { ...user, storeName: store.name };
         }
     });
-    let d = new Date(user.createdAt);
-    let date = `${d.getDay()}.${d.getMonth()}.${d.getFullYear()}`;
+    let date = formatDate(user.createdAt);
     user = { ...user, createdAt: date };
     return (
         <Wrapper>

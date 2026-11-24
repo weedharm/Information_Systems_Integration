@@ -1,3 +1,4 @@
-const API_URL = "http://localhost:8000";
+// Base URL of the API gateway; override at build time with REACT_APP_API_URL.
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export { API_URL };

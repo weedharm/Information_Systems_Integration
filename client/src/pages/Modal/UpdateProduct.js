@@ -5,7 +5,7 @@ import Button from "../../components/Button";
 import * as Yup from "yup";
 import { Content, Wrapper, ButtonLocal, Grid } from "./styles";
 import SelectField from "../../components/SelectField";
-import axios from "axios";
+import api from "../../apis/api";
 const UpdateProduct = ({ setOpenModal, currentObject, setReload, categories }) => {
     let options = [];
 
@@ -36,7 +36,7 @@ const UpdateProduct = ({ setOpenModal, currentObject, setReload, categories }) =
         category: Yup.string().required("Category is required!"),
     });
 
-    const handleSubmit = (values) => {
+    const handleSubmit = async (values) => {
         let formData = new FormData();
         formData.append("name", values.name);
         formData.append("sku", values.sku);
@@ -47,7 +47,7 @@ const UpdateProduct = ({ setOpenModal, currentObject, setReload, categories }) =
         formData.append("weight", values.weight);
         formData.append("photo", values.photo);
         formData.append("category", values.category);
-        axios.put("http://localhost:8003/products/" + currentObject.id, formData);
+        await api.put("/sv_3/products/" + currentObject.id, formData);
         setReload(1);
         setOpenModal(false);
     };

@@ -8,6 +8,7 @@ import Table from "../../components/Table";
 import CreateOrder from "../Modal/CreateOrder";
 import UpdateOrder from "../Modal/UpdateOrder";
 import DetailOrder from "../Modal/DetailOrder";
+import formatDate from "../../utils/formatDate";
 
 const Order = () => {
     const [orders, setOrders] = useState([]);
@@ -45,8 +46,7 @@ const Order = () => {
     }, [storeId, reload]);
 
     orders.forEach((order) => {
-        let d = new Date(order.createdAt);
-        let date = `${d.getDay()}.${d.getMonth()}.${d.getFullYear()}`;
+        let date = formatDate(order.createdAt);
         let count = order.listProduct.length;
         datas.push({ ...order, createdAt: date, productCount: count });
     });

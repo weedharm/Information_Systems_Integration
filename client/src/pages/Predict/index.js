@@ -4,7 +4,6 @@ import BarChart from "../../components/BarChart";
 import { Wrapper, GridTwo, Title1, OptionField } from "./styles";
 import Spinner from "../../components/Spinner";
 import Select from "../../components/Select";
-import axios from "axios";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -102,13 +101,12 @@ const Predict = () => {
     const runPredict = async () => {
         try {
             setLoading(true);
-            const res = await axios.get("http://127.0.0.1:8005/run/predict");
-            console.log(res.data);
-            if (res.data.resultCode === 1) {
+            const res = await apis.analysis.runPredict();
+            if (res.resultCode === 1) {
                 setSuccess(true);
-                setCurrentWeek(res.data.current_week);
-                setWeek1(res.data.current_week + 1);
-                setWeek2(res.data.current_week + 1);
+                setCurrentWeek(res.currentWeek);
+                setWeek1(res.currentWeek + 1);
+                setWeek2(res.currentWeek + 1);
             }
         } catch (error) {
             setError(true);

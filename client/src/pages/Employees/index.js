@@ -9,6 +9,7 @@ import CreateUser from "../Modal/CreateUser";
 import UpdateUser from "../Modal/UpdateUser";
 import { useDispatch } from "react-redux";
 import { getUsersAsync } from "../../redux/userSlice";
+import formatDate from "../../utils/formatDate";
 
 const Employee = () => {
     const [openDetailModal, setOpenDetailModal] = useState(false);
@@ -35,8 +36,7 @@ const Employee = () => {
     let datas = [];
 
     users.forEach((user) => {
-        let d = new Date(user.createdAt);
-        let date = `${d.getDay()}.${d.getMonth()}.${d.getFullYear()}`;
+        let date = formatDate(user.createdAt);
         if (user.storeId === store.selectedStore) {
             datas.push({ ...user, createdAt: date, roleName: user.role.name });
         }
