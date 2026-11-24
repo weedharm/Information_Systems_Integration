@@ -1,0 +1,19 @@
+{
+    "categories": [
+        { "_id": "64b000000000000000000201", "name": "Vegetables" },
+        { "_id": "64b000000000000000000202", "name": "Fruits" },
+        { "_id": "64b000000000000000000203", "name": "Seafood" }
+    ],
+    "products": [
+        { "_id": "64b000000000000000000301", "name": "White cabbage", "sku": "VEG-001", "unit": "kg", "origin": "Da Lat", "weight": "1kg", "category": "64b000000000000000000201", "photo_name": "white-cabbage.jpg", "price": 18000 },
+        { "_id": "64b000000000000000000302", "name": "Malabar spinach", "sku": "VEG-002", "unit": "bunch", "origin": "Hanoi", "weight": "300g", "category": "64b000000000000000000201", "photo_name": "malabar-spinach.jpg", "price": 12000 },
+        { "_id": "64b000000000000000000303", "name": "Australian orange", "sku": "FRU-001", "unit": "kg", "origin": "Australia", "weight": "1kg", "category": "64b000000000000000000202", "photo_name": "australian-orange.jpg", "price": 65000 },
+        { "_id": "64b000000000000000000304", "name": "Green-skin pomelo", "sku": "FRU-002", "unit": "piece", "origin": "Ben Tre", "weight": "1.2kg", "category": "64b000000000000000000202", "photo_name": "green-pomelo.jpg", "price": 55000 },
+        { "_id": "64b000000000000000000305", "name": "Korean pear", "sku": "FRU-003", "unit": "kg", "origin": "Korea", "weight": "1kg", "category": "64b000000000000000000202", "photo_name": "korean-pear.jpg", "price": 89000 },
+        { "_id": "64b000000000000000000306", "name": "Star apple", "sku": "FRU-004", "unit": "kg", "origin": "Tien Giang", "weight": "1kg", "category": "64b000000000000000000202", "photo_name": "star-apple.jpg", "price": 45000 },
+        { "_id": "64b000000000000000000307", "name": "Tilapia", "sku": "SEA-001", "unit": "kg", "origin": "Hai Duong", "weight": "1kg", "category": "64b000000000000000000203", "photo_name": "tilapia.jpg", "price": 60000 },
+        { "_id": "64b000000000000000000308", "name": "Cleaned eel", "sku": "SEA-002", "unit": "kg", "origin": "Nghe An", "weight": "500g", "category": "64b000000000000000000203", "photo_name": "eel.jpg", "price": 120000 }
+    ],
+    "stores": ["64b000000000000000000001", "64b000000000000000000002"],
+    "initialStock": 100
+}

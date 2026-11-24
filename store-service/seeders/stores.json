@@ -1,0 +1,16 @@
+[
+    {
+        "_id": "64b000000000000000000001",
+        "name": "Central Store",
+        "address": "1 Demo Street, Hoan Kiem, Hanoi",
+        "manager_id": "64b000000000000000000101",
+        "number_employee": 1
+    },
+    {
+        "_id": "64b000000000000000000002",
+        "name": "West Lake Store",
+        "address": "2 Demo Street, Tay Ho, Hanoi",
+        "manager_id": "64b000000000000000000102",
+        "number_employee": 1
+    }
+]
