@@ -1,4 +1,4 @@
-# ERP Microservices — Retail Chain Management with Sales Forecasting
+# RetailHub ERP — Microservices for Retail Chain Management with Sales Forecasting
 
 A small ERP system for a multi-store retail chain, built as a set of independent
 microservices. It covers staff and role management, stores, products and per-store
@@ -173,3 +173,8 @@ in [`requests.http`](requests.http) (VS Code *REST Client* extension).
 | Overview | Store stock |
 |---|---|
 | ![Overview](docs/screenshots/overview.png) | ![Warehouse](docs/screenshots/warehouse.png) |
+
+## License
+
+Code is released under the [MIT License](LICENSE). The sales dataset in
+`model-training/` comes from the Kaggle competition linked above and is subject to its own terms.

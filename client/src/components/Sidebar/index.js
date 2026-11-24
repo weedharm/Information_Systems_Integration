@@ -31,7 +31,7 @@ const Sidebar = ({ match }) => {
                 <div className='sidebar-header'>
                     <h3 className='brand'>
                         <span className='ti-unlink'></span>
-                        <span>VinMart</span>
+                        <span>RetailHub</span>
                     </h3>
                     <label htmlFor='sidebar-toggle' className='ti-menu-alt'></label>
                 </div>
