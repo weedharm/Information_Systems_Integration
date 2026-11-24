@@ -1,0 +1,5 @@
+# Generated model artifact (run `python train_model.py`)
+model/
+__pycache__/
+*.pyc
+.venv/
