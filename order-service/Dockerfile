@@ -1,5 +1,10 @@
-FROM node:14-alpine
-WORKDIR /order-service
+FROM node:20-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
 COPY . .
-RUN npm install
-CMD ["npm", "start"]
+EXPOSE 8004
+CMD ["node", "index.js"]

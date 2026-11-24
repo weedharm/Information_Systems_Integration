@@ -1,0 +1,99 @@
+name: erp-microservices
+
+x-node-env: &node-env
+  JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me}
+  AMQP_URL: amqp://rabbitmq:5672
+
+x-backing-services: &backing-services
+  mongo:
+    condition: service_healthy
+  rabbitmq:
+    condition: service_healthy
+
+services:
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    ports:
+      - "15672:15672" # management UI (guest / guest)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+
+  user-service:
+    build: ./user-service
+    command: sh -c "node seeders/seed.js && node index.js"
+    environment:
+      <<: *node-env
+      MONGO_URI: mongodb://mongo:27017/user-service
+      DEMO_PASSWORD: ${DEMO_PASSWORD:-admin123}
+    ports: ["8001:8001"] # serves uploaded avatars
+    depends_on: *backing-services
+
+  store-service:
+    build: ./store-service
+    command: sh -c "node seeders/seed.js && node index.js"
+    environment:
+      <<: *node-env
+      MONGO_URI: mongodb://mongo:27017/store-service
+    depends_on: *backing-services
+
+  product-service:
+    build: ./product-service
+    command: sh -c "node seeders/seed.js && node index.js"
+    environment:
+      <<: *node-env
+      MONGO_URI: mongodb://mongo:27017/product-service
+    ports: ["8003:8003"] # serves product photos
+    depends_on: *backing-services
+
+  order-service:
+    build: ./order-service
+    environment:
+      <<: *node-env
+      MONGO_URI: mongodb://mongo:27017/order-service
+    depends_on: *backing-services
+
+  analysis-service:
+    build:
+      context: .
+      dockerfile: analysis-service/Dockerfile
+
+  api-gateway:
+    build: ./api-gateway
+    environment:
+      USER_SERVICE_URL: http://user-service:8001
+      STORE_SERVICE_URL: http://store-service:8002
+      PRODUCT_SERVICE_URL: http://product-service:8003
+      ORDER_SERVICE_URL: http://order-service:8004
+      ANALYSIS_SERVICE_URL: http://analysis-service:8005
+    ports: ["8000:8000"]
+    depends_on:
+      - user-service
+      - store-service
+      - product-service
+      - order-service
+      - analysis-service
+
+  client:
+    build:
+      context: ./client
+      args:
+        REACT_APP_API_URL: http://localhost:8000
+    ports: ["3000:80"]
+    depends_on:
+      - api-gateway
+
+volumes:
+  mongo-data:
