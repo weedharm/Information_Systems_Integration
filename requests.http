@@ -1,0 +1,69 @@
+# Example requests for the VS Code "REST Client" extension (or the JetBrains HTTP client).
+# Everything goes through the API gateway. Send "Login" first; its token is reused below.
+
+@gateway = http://localhost:8000/api
+@token = {{login.response.body.token}}
+
+### Gateway health check
+GET {{gateway}}
+
+### Login (demo account created by the seed script)
+# @name login
+POST {{gateway}}/sv_1/login
+Content-Type: application/json
+
+{
+    "email": "director@erp.local",
+    "password": "admin123"
+}
+
+### Current user
+GET {{gateway}}/sv_1/current
+Authorization: Bearer {{token}}
+
+### List users
+GET {{gateway}}/sv_1/users
+Authorization: Bearer {{token}}
+
+### List roles
+GET {{gateway}}/sv_1/roles
+Authorization: Bearer {{token}}
+
+### List stores
+GET {{gateway}}/sv_2/stores
+Authorization: Bearer {{token}}
+
+### Create a store
+POST {{gateway}}/sv_2/stores
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "New Demo Store",
+    "address": "3 Demo Street, Cau Giay, Hanoi",
+    "manager_id": "64b000000000000000000101"
+}
+
+### Create a category
+POST {{gateway}}/sv_3/categories
+Content-Type: application/json
+
+{ "name": "Vegetables" }
+
+### List products
+GET {{gateway}}/sv_3/products
+
+### List stock items of a store
+GET {{gateway}}/sv_3/items/in-store/64b000000000000000000001
+
+### List orders
+GET {{gateway}}/sv_4/orders
+
+### Analysis: departments per store (historical data)
+GET {{gateway}}/sv_5/analysis/truth/department
+
+### Analysis: run the sales forecast (call this before the other predict endpoints)
+GET {{gateway}}/sv_5/run/predict
+
+### Analysis: last year, this year and the 4-week forecast
+GET {{gateway}}/sv_5/analysis/predict/weeklySaleInYear
